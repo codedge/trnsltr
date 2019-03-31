@@ -1,11 +1,16 @@
 language: php
 
 php:
-  - 7.2
   - 7.3
+
+services:
+  - redis-server
 
 install:
   - travis_retry composer install --no-interaction --prefer-source
+
+before_script:
+  - cp .env.example .env
 
 script:
   - vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.xml
