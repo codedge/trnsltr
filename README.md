@@ -1,3 +1,5 @@
+[![TravisCI](https://api.travis-ci.org/datendampfer/stmr-engine.svg?branch=master)](https://travis-ci.org/codedge/trnsltr.svg?branch=master)
+
 # trnsltr - a translation caching service backed by DeepL
 
 **trnsltr** is a translation caching service that stores already translated data in (currently) Redis. Words and texts
