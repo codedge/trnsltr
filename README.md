@@ -1,4 +1,7 @@
+[![Latest Stable Version](https://poser.pugx.org/codedge/trnsltr/v/stable?format=flat-square)](https://packagist.org/packages/codedge/trnsltr)
 [![TravisCI](https://api.travis-ci.org/datendampfer/stmr-engine.svg?branch=master)](https://travis-ci.org/codedge/trnsltr.svg?branch=master)
+[![Total Downloads](https://poser.pugx.org/codedge/trnsltr/downloads?format=flat-square)](https://packagist.org/packages/codedge/trnsltr)
+[![License](https://poser.pugx.org/codedge/trnsltr/license?format=flat-square)](https://packagist.org/packages/codedge/trnsltr)
 
 # trnsltr - a translation caching service backed by DeepL
 
