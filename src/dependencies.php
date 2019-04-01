@@ -1,9 +1,20 @@
 <?php declare(strict_types = 1);
 
 use App\Http\Controller\TranslateController;
+use App\Http\Controller\AuthController;
 use Psr\Container\ContainerInterface;
 
 $container = $app->getContainer();
+
+// Database
+$container['database'] = function (ContainerInterface $c) {
+    $capsule = new \Illuminate\Database\Capsule\Manager;
+    $capsule->addConnection($c->get('settings')['database']);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
+};
 
 // Redis cache
 $container['cache'] = function (ContainerInterface $c) {
@@ -48,4 +59,11 @@ $container[TranslateController::class] = function (ContainerInterface $c): Trans
     $repository = new \App\Repository\TranslateRepository($c, $guzzle, $settings, $logger);
 
     return new TranslateController($validator, $repository);
+};
+
+$container[AuthController::class] = function (ContainerInterface $c): AuthController {
+    $validator = $c->get("validator");
+    $repository = new \App\Repository\AuthRepository($c);
+
+    return new AuthController($validator, $repository);
 };
