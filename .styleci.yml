@@ -1,0 +1,10 @@
+preset: recommended
+risky: true
+finder:
+  exclude:
+    - docker
+    - frontend
+    - public
+    - logs
+    - vendor
+  name: "*.php"
