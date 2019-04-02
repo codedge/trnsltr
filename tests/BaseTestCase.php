@@ -13,6 +13,8 @@ use Slim\Http\Response;
 
 abstract class BaseTestCase extends TestCase
 {
+    const TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6bnVsbCwiZW1haWwiOm51bGx9.KQQcsL44z_A7qVHgnaJYIQZ7QHvKsmwuL6VT_L4R_bk';
+
     /**
      * @var Logger
      */
@@ -80,13 +82,15 @@ abstract class BaseTestCase extends TestCase
      * @param null $requestData
      * @param array $headers
      *
+     * @param null $token
+     *
      * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      * @throws \Slim\Exception\MethodNotAllowedException
      * @throws \Slim\Exception\NotFoundException
      */
-    public function request($requestMethod, $requestUri, $requestData = null, $headers = [])
+    public function request($requestMethod, $requestUri, $requestData = null, $headers = [], $token = null)
     {
-        return $this->runApp($requestMethod, $requestUri, $requestData, $headers);
+        return $this->runApp($requestMethod, $requestUri, $requestData, $headers, $token);
     }
 
     /**
@@ -95,14 +99,14 @@ abstract class BaseTestCase extends TestCase
      * @param string $requestMethod the request method (e.g. GET, POST, etc.)
      * @param string $requestUri the request URI
      * @param array|object|null $requestData the request data
-     *
      * @param array $headers
+     * @param null $token
      *
      * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      * @throws \Slim\Exception\MethodNotAllowedException
      * @throws \Slim\Exception\NotFoundException
      */
-    public function runApp($requestMethod, $requestUri, $requestData = null, $headers = [])
+    public function runApp($requestMethod, $requestUri, $requestData = null, $headers = [], $token = null)
     {
         // Create a mock environment for testing with
         $environment = Environment::mock(
@@ -118,12 +122,17 @@ abstract class BaseTestCase extends TestCase
                 $headers
             )
         );
-        
+
         // Set up a request object based on the environment
         $request = Request::createFromEnvironment($environment);
         // Add request data, if it exists
         if (isset($requestData)) {
             $request = $request->withParsedBody($requestData);
+        }
+
+        // Add token, if exists
+        if($token !== null) {
+            $request = $request->withHeader('Authorization', 'Bearer ' . $token);
         }
 
         // Set up a response object
