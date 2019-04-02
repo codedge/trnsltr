@@ -18,6 +18,7 @@ env:
 
 before_script:
   - mysql -e "create database IF NOT EXISTS trnsltr;"
+  - cp .env.example .env
   - vendor/bin/phinx migrate
 
 script:
