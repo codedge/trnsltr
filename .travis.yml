@@ -6,11 +6,15 @@ php:
 services:
   - redis-server
 
+addons:
+  mariadb: '10.3'
+
 install:
   - travis_retry composer install --no-interaction --prefer-source
 
 before_script:
   - cp .env.example .env
+  - vendor/bin/phinx migrate
 
 script:
   - vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.xml

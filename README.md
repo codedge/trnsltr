@@ -38,6 +38,13 @@ For authentication [JWT (Json Web Tokens)](https://jwt.io/) are used. Please spe
 A requirement for this to work is a working database connection to some `users` table where all your users are saved.
 When this is set up, you can use the `/auth/token` route to get a valid token.
 
+If you want to generate a new users table you can run
+
+```shell
+$ vendor/bin/phinx migrate
+```
+
+Example for getting a token:
 ```shell
 $ curl -d "email=john.doe@example.com&password=test123" -X POST http://trnsltr.localhost:8081/auth/token
 ```

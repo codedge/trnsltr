@@ -11,10 +11,10 @@ $container['database'] = function (ContainerInterface $c) {
     $capsule = new \Illuminate\Database\Capsule\Manager;
     $capsule->addConnection($c->get('settings')['database']);
     $capsule->setAsGlobal();
-    $capsule->bootEloquent();
 
     return $capsule;
 };
+$container['database']->bootEloquent();
 
 // Redis cache
 $container['cache'] = function (ContainerInterface $c) {
