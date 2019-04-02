@@ -21,7 +21,7 @@ the `.env.example` file for configuration vars.
 
 **Redis**
 * `REDIS_HOST`: default `127.0.0.1`
-* `REDIS_PORt`: default `6379`
+* `REDIS_PORT`: default `6379`
 * `REDIS_DATABASE`: default `0` 
 
 If you are fine with the default you can remove all REDIS_* config keys from your `.env` file.
