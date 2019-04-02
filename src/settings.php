@@ -17,7 +17,7 @@ return [
             'host' => $_ENV['DB_HOST'] ?? 'localhost',
             'database' => $_ENV['DB_NAME'] ?? 'trnsltr',
             'username' => $_ENV['DB_USER'] ?? 'trnsltr',
-            'password' => $_ENV['DB_PASSWORD'] ?? 'secret_password',
+            'password' => $_ENV['DB_PASSWORD'] ?? '',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => $_ENV['DB_PREFIX'] ?? '',
