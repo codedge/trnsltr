@@ -40,14 +40,18 @@ final class AuthRepository
     public function login(string $email, string $password): string
     {
         $token = '';
-        $user = $this->userTable->where('email', '=', $email)
-                                ->get()[0];
 
-        if($user && password_verify($password, $user->password)) {
-            $token = JWT::encode([
-                'id' => $user->id,
-                'email' => $user->email,
-            ], $this->settings['secret']);
+        $users = $this->userTable->where('email', '=', $email);
+
+        if($users->exists()) {
+            $user = $users->get()->first();
+            
+            if($user && password_verify($password, $user->password)) {
+                $token = JWT::encode([
+                    'id' => $user->id,
+                    'email' => $user->email,
+                ], $this->settings['secret']);
+            }
         }
 
         return $token;
