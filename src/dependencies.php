@@ -67,3 +67,10 @@ $container[AuthController::class] = function (ContainerInterface $c): AuthContro
 
     return new AuthController($validator, $repository);
 };
+
+// If not on production, show errors (remove Slim error handlers)
+if($container['settings']['displayErrorDetails'] === true) {
+    unset($container['phpErrorHandler']);
+    unset($container['errorHandler']);
+}
+
