@@ -12,10 +12,6 @@ addons:
 install:
   - travis_retry composer install --no-interaction --prefer-source
 
-env:
-  - DB_USER=root
-  - DB_PASS=
-
 before_script:
   - mysql -e "create database IF NOT EXISTS trnsltr;"
   - cp .env.example .env
