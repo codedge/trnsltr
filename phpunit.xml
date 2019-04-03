@@ -22,6 +22,8 @@
         </whitelist>
     </filter>
     <php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_URL" value="localhost"/>
+        <env name="APP_API_SECRET" value="secret"/>
     </php>
 </phpunit>

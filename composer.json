@@ -15,11 +15,14 @@
         "ext-json": "*",
         "awurth/slim-validation": "^3.1",
         "guzzlehttp/guzzle": "^6.3",
+        "illuminate/database": "^5.8",
         "monolog/monolog": "^1.17",
         "predis/predis": "^1.1",
+        "robmorgan/phinx": "^0.10.6",
         "slim/slim": "^3.1",
         "tightenco/collect": "^5.8",
         "tuupola/cors-middleware": "^0.9.4",
+        "tuupola/slim-jwt-auth": "^3.3",
         "vlucas/phpdotenv": "^3.3"
     },
     "require-dev": {

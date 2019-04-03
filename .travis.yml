@@ -6,11 +6,20 @@ php:
 services:
   - redis-server
 
+addons:
+  mariadb: '10.3'
+
 install:
   - travis_retry composer install --no-interaction --prefer-source
 
+env:
+  - DB_USER=root
+  - DB_PASS=
+
 before_script:
+  - mysql -e "create database IF NOT EXISTS trnsltr;"
   - cp .env.example .env
+  - vendor/bin/phinx migrate
 
 script:
   - vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.xml

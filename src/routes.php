@@ -1,7 +1,10 @@
 <?php declare(strict_types = 1);
 
+// Get JWT token
+$app->post('/auth/token', \App\Http\Controller\AuthController::class . ':token')->setName('auth.token');
 
 $app->group('/api/v1', function () {
+    // Translate text
     $this->get(
         '/translate/text/{text}/target-lang/{target-lang}[/source-lang/{source-lang}]',
         \App\Http\Controller\TranslateController::class . ':translate'

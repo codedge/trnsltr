@@ -11,6 +11,7 @@ services:
             - ./docker/site.conf:/etc/nginx/conf.d/default.conf
         links:
             - php
+            - database
     php:
         image: edbizarro/gitlab-ci-pipeline-php:7.3-fpm
         volumes:
@@ -18,5 +19,24 @@ services:
             - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
         working_dir: /usr/share/nginx/html
         tty: true
+        links:
+            - database
     redis:
         image: redis:latest
+    database:
+        image: mariadb:latest
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: mySecretRootPasswort123
+            MYSQL_DATABASE: trnsltr
+            MYSQL_USER: trnsltr
+            MYSQL_PASSWORD: trnsltrPassword
+        volumes:
+            - ./src:/var/www/html
+            - data:/var/lib/mysql
+        working_dir: /var/www/html
+
+volumes:
+    data:
