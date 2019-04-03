@@ -57,36 +57,36 @@ abstract class BaseTestCase extends TestCase
      */
     protected function createApplication(): void
     {
-        $dotenv = Dotenv::create(__DIR__ . '/..');
+        $dotenv = Dotenv::create(__DIR__.'/..');
         $dotenv->load();
 
         // Use the application settings
-        $settings = require __DIR__ . '/../src/settings.php';
+        $settings = require __DIR__.'/../src/settings.php';
         // Instantiate the application
         $this->app = $app = new App($settings);
         // Set up dependencies
-        require __DIR__ . '/../src/dependencies.php';
+        require __DIR__.'/../src/dependencies.php';
         // Register middleware
         if ($this->withMiddleware) {
-            require __DIR__ . '/../src/middleware.php';
+            require __DIR__.'/../src/middleware.php';
         }
         // Register routes
-        require __DIR__ . '/../src/routes.php';
+        require __DIR__.'/../src/routes.php';
     }
 
     /**
-     * Make a request to the Api
+     * Make a request to the Api.
      *
      * @param       $requestMethod
      * @param       $requestUri
-     * @param null $requestData
+     * @param null  $requestData
      * @param array $headers
+     * @param null  $token
      *
-     * @param null $token
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      * @throws \Slim\Exception\MethodNotAllowedException
      * @throws \Slim\Exception\NotFoundException
+     *
+     * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      */
     public function request($requestMethod, $requestUri, $requestData = null, $headers = [], $token = null)
     {
@@ -94,17 +94,18 @@ abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Process the application given a request method and URI
+     * Process the application given a request method and URI.
      *
-     * @param string $requestMethod the request method (e.g. GET, POST, etc.)
-     * @param string $requestUri the request URI
-     * @param array|object|null $requestData the request data
-     * @param array $headers
-     * @param null $token
+     * @param string            $requestMethod the request method (e.g. GET, POST, etc.)
+     * @param string            $requestUri    the request URI
+     * @param array|object|null $requestData   the request data
+     * @param array             $headers
+     * @param null              $token
      *
-     * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      * @throws \Slim\Exception\MethodNotAllowedException
      * @throws \Slim\Exception\NotFoundException
+     *
+     * @return \Psr\Http\Message\ResponseInterface|\Slim\Http\Response
      */
     public function runApp($requestMethod, $requestUri, $requestData = null, $headers = [], $token = null)
     {
@@ -131,15 +132,14 @@ abstract class BaseTestCase extends TestCase
         }
 
         // Add token, if exists
-        if($token !== null) {
-            $request = $request->withHeader('Authorization', 'Bearer ' . $token);
+        if ($token !== null) {
+            $request = $request->withHeader('Authorization', 'Bearer '.$token);
         }
 
         // Set up a response object
         $response = new Response();
-        
+
         // Process the application and Return the response
         return $this->app->process($request, $response);
     }
-
 }

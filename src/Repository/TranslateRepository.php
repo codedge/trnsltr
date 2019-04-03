@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -6,10 +8,10 @@ use App\Models\Translation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Monolog\Logger;
+use Predis\Client as RedisClient;
 use Predis\Response\Status;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Predis\Client as RedisClient;
 use Tightenco\Collect\Support\Collection;
 
 final class TranslateRepository
@@ -17,7 +19,7 @@ final class TranslateRepository
     const TRANSLATION_DIVIDER = ':';
 
     /**
-     * Configuration settings
+     * Configuration settings.
      *
      * @var array
      */
@@ -42,9 +44,9 @@ final class TranslateRepository
      * TranslateRepository constructor.
      *
      * @param ContainerInterface $container
-     * @param Client $httpClient
-     * @param array $settings
-     * @param Logger $logger
+     * @param Client             $httpClient
+     * @param array              $settings
+     * @param Logger             $logger
      */
     public function __construct(ContainerInterface $container, Client $httpClient, array $settings, Logger $logger)
     {
@@ -74,13 +76,12 @@ final class TranslateRepository
                     ->setTargetText($targetText);
 
         $saved = $this->saveToCache($translation);
-        if($saved) {
+        if ($saved) {
             return $translation;
         }
 
         return false;
     }
-
 
     /**
      * Delete translation.
@@ -95,10 +96,10 @@ final class TranslateRepository
     {
         return (bool) $this->cache->del([
             $sourceLang
-            . self::TRANSLATION_DIVIDER
-            . $sourceText
-            . self::TRANSLATION_DIVIDER
-            . $targetLang
+            .self::TRANSLATION_DIVIDER
+            .$sourceText
+            .self::TRANSLATION_DIVIDER
+            .$targetLang,
         ]);
     }
 
@@ -113,7 +114,7 @@ final class TranslateRepository
         $translationCollection = (new Collection($allKeys))->map(function ($item) {
             return $this->getFromCache($item);
         });
- 
+
         return $translationCollection;
     }
 
@@ -131,12 +132,12 @@ final class TranslateRepository
         $translation = new Translation();
 
         try {
-            if($this->existsInCache($text, $sourceLang, $targetLang)) {
+            if ($this->existsInCache($text, $sourceLang, $targetLang)) {
                 return $this->getFromCache($sourceLang
-                                           . self::TRANSLATION_DIVIDER
-                                           . $text
-                                           . self::TRANSLATION_DIVIDER
-                                           . $targetLang);
+                                           .self::TRANSLATION_DIVIDER
+                                           .$text
+                                           .self::TRANSLATION_DIVIDER
+                                           .$targetLang);
             }
 
             // Process DeepL response
@@ -155,7 +156,6 @@ final class TranslateRepository
             $this->saveToCache($translation);
 
             return $translation;
-
         } catch (GuzzleException $e) {
             $this->logger->warning($e->getMessage());
         }
@@ -170,22 +170,23 @@ final class TranslateRepository
      * @param string $text
      * @param string $sourceLang
      *
-     * @return ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @return ResponseInterface
      */
     protected function deeplTranslate(string $targetLang, string $text, string $sourceLang = ''): ResponseInterface
     {
         return $this->httpClient->request(
             'GET',
-            '/' . $this->settings['api_version'] . '/translate',
+            '/'.$this->settings['api_version'].'/translate',
             [
             'query' => [
-                'auth_key' => $this->settings['api_token'],
+                'auth_key'            => $this->settings['api_token'],
                 'preserve_formatting' => 1,
-                'text' => $text,
-                'source_lang' => $sourceLang,
-                'target_lang' => $targetLang,
-            ]
+                'text'                => $text,
+                'source_lang'         => $sourceLang,
+                'target_lang'         => $targetLang,
+            ],
             ]
         );
     }
@@ -203,10 +204,10 @@ final class TranslateRepository
     {
         return (bool) $this->cache->exists(
             $sourceLanguage
-            . self::TRANSLATION_DIVIDER
-            . $text
-            . self::TRANSLATION_DIVIDER
-            . $targetLanguage
+            .self::TRANSLATION_DIVIDER
+            .$text
+            .self::TRANSLATION_DIVIDER
+            .$targetLanguage
         );
     }
 
@@ -220,10 +221,10 @@ final class TranslateRepository
     private function saveToCache(Translation $translation): bool
     {
         $key = $translation->getSourceLanguage()
-               . self::TRANSLATION_DIVIDER
-               . $translation->getSourceText()
-               . self::TRANSLATION_DIVIDER
-               . $translation->getTargetLanguage();
+               .self::TRANSLATION_DIVIDER
+               .$translation->getSourceText()
+               .self::TRANSLATION_DIVIDER
+               .$translation->getTargetLanguage();
 
         /** @var Status $response */
         $response = $this->cache->set($key, $translation->getTargetText());

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -46,7 +48,7 @@ final class Translation implements \JsonSerializable
      *
      * @return $this
      */
-    public function setSourceText(string $text): Translation
+    public function setSourceText(string $text): self
     {
         $this->sourceText = $text;
 
@@ -70,7 +72,7 @@ final class Translation implements \JsonSerializable
      *
      * @return Translation
      */
-    public function setTargetText(string $text): Translation
+    public function setTargetText(string $text): self
     {
         $this->targetText = $text;
 
@@ -94,7 +96,7 @@ final class Translation implements \JsonSerializable
      *
      * @return Translation
      */
-    public function setSourceLanguage(string $language): Translation
+    public function setSourceLanguage(string $language): self
     {
         $this->sourceLanguage = strtolower($language);
 
@@ -118,7 +120,7 @@ final class Translation implements \JsonSerializable
      *
      * @return Translation
      */
-    public function setTargetLanguage(string $language): Translation
+    public function setTargetLanguage(string $language): self
     {
         $this->targetLanguage = strtolower($language);
 
@@ -142,7 +144,7 @@ final class Translation implements \JsonSerializable
      *
      * @return Translation
      */
-    public function setLoadedFromCache(bool $flag): Translation
+    public function setLoadedFromCache(bool $flag): self
     {
         $this->loadedFromCache = $flag;
 
@@ -168,9 +170,9 @@ final class Translation implements \JsonSerializable
     {
         return
             [
-                'source_text' => $this->getSourceText(),
+                'source_text'     => $this->getSourceText(),
                 'source_language' => $this->getSourceLanguage(),
-                'target_text' => $this->getTargetText(),
+                'target_text'     => $this->getTargetText(),
                 'target_language' => $this->getTargetLanguage(),
             ];
     }

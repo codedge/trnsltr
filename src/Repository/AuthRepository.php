@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Repository;
 
-use Psr\Container\ContainerInterface;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Query\Builder;
+use Psr\Container\ContainerInterface;
 
 final class AuthRepository
 {
@@ -43,12 +45,12 @@ final class AuthRepository
 
         $users = $this->userTable->where('email', '=', $email);
 
-        if($users->exists()) {
+        if ($users->exists()) {
             $user = $users->get()->first();
-            
-            if($user && password_verify($password, $user->password)) {
+
+            if ($user && password_verify($password, $user->password)) {
                 $token = JWT::encode([
-                    'id' => $user->id,
+                    'id'    => $user->id,
                     'email' => $user->email,
                 ], $this->settings['secret']);
             }

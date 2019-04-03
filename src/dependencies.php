@@ -1,14 +1,16 @@
-<?php declare(strict_types = 1);
+<?php
 
-use App\Http\Controller\TranslateController;
+declare(strict_types=1);
+
 use App\Http\Controller\AuthController;
+use App\Http\Controller\TranslateController;
 use Psr\Container\ContainerInterface;
 
 $container = $app->getContainer();
 
 // Database
 $container['database'] = function (ContainerInterface $c) {
-    $capsule = new \Illuminate\Database\Capsule\Manager;
+    $capsule = new \Illuminate\Database\Capsule\Manager();
     $capsule->addConnection($c->get('settings')['database']);
     $capsule->setAsGlobal();
 
@@ -19,9 +21,9 @@ $container['database']->bootEloquent();
 // Redis cache
 $container['cache'] = function (ContainerInterface $c) {
     $config = [
-        'schema' => $c->get('settings')['redis']['schema'],
-        'host' => $c->get('settings')['redis']['host'],
-        'port' => $c->get('settings')['redis']['port'],
+        'schema'   => $c->get('settings')['redis']['schema'],
+        'host'     => $c->get('settings')['redis']['host'],
+        'port'     => $c->get('settings')['redis']['port'],
         'database' => $c->get('settings')['redis']['database'],
     ];
 
@@ -34,6 +36,7 @@ $container['logger'] = function (ContainerInterface $c) {
     $logger = new Monolog\Logger($settings['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
+
     return $logger;
 };
 
@@ -45,8 +48,8 @@ $container['validator'] = function () {
 // Controller
 $container[TranslateController::class] = function (ContainerInterface $c): TranslateController {
     $logger = $c->get('logger');
-    $cache = $c->get("cache");
-    $validator = $c->get("validator");
+    $cache = $c->get('cache');
+    $validator = $c->get('validator');
 
     $guzzle = new \GuzzleHttp\Client(
         [
@@ -55,22 +58,21 @@ $container[TranslateController::class] = function (ContainerInterface $c): Trans
     );
 
     $settings = $c->get('settings')['deepl'];
-    
+
     $repository = new \App\Repository\TranslateRepository($c, $guzzle, $settings, $logger);
 
     return new TranslateController($validator, $repository);
 };
 
 $container[AuthController::class] = function (ContainerInterface $c): AuthController {
-    $validator = $c->get("validator");
+    $validator = $c->get('validator');
     $repository = new \App\Repository\AuthRepository($c);
 
     return new AuthController($validator, $repository);
 };
 
 // If not on production, show errors (remove Slim error handlers)
-if($container['settings']['displayErrorDetails'] === true) {
+if ($container['settings']['displayErrorDetails'] === true) {
     unset($container['phpErrorHandler']);
     unset($container['errorHandler']);
 }
-
