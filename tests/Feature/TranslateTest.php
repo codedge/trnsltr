@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Feature;
 
@@ -11,7 +13,7 @@ class TranslateTest extends BaseTestCase
     public function test_translate_success()
     {
         $response = $this->request('GET', '/api/v1/translate/text/hello/target-lang/de/source-lang/en', null, [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Success', $body['status']);
@@ -28,7 +30,7 @@ class TranslateTest extends BaseTestCase
     public function test_translate_validation_error()
     {
         $response = $this->request('GET', '/api/v1/translate/text/hello/target-lang/e', null, [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals('Validation Error', $body['status']);
@@ -38,7 +40,7 @@ class TranslateTest extends BaseTestCase
     public function test_all_translations()
     {
         $response = $this->request('GET', '/api/v1/translation', null, [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Success', $body['status']);
@@ -59,7 +61,7 @@ class TranslateTest extends BaseTestCase
             'target_text' => 'kurz',
             'target_lang' => 'de',
         ], [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Success', $body['status']);
@@ -73,7 +75,7 @@ class TranslateTest extends BaseTestCase
             'target_text' => 'kurz',
             'target_lang' => 'de',
         ], [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals('Validation Error', $body['status']);
@@ -101,17 +103,15 @@ class TranslateTest extends BaseTestCase
 
         $cache->set(
             $payload['source_lang']
-            . TranslateRepository::TRANSLATION_DIVIDER
-            . $payload['source_text']
-            . TranslateRepository::TRANSLATION_DIVIDER
-            . $payload['target_lang']
-            ,
+            .TranslateRepository::TRANSLATION_DIVIDER
+            .$payload['source_text']
+            .TranslateRepository::TRANSLATION_DIVIDER
+            .$payload['target_lang'],
             'Tasche'
         );
 
-    
         $response = $this->request('DELETE', '/api/v1/translation', $payload, [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Success', $body['status']);
@@ -124,7 +124,7 @@ class TranslateTest extends BaseTestCase
             'source_lang' => 'en',
             'target_lang' => 'de',
         ], [], self::TOKEN);
-        $body = json_decode((string)$response->getBody(), true);
+        $body = json_decode((string) $response->getBody(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals('Validation Error', $body['status']);
@@ -136,5 +136,4 @@ class TranslateTest extends BaseTestCase
 
         $this->assertEquals(401, $response->getStatusCode());
     }
-
 }

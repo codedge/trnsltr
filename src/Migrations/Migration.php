@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Migrations;
 
@@ -10,6 +12,7 @@ class Migration extends AbstractMigration
 {
     /** @var Schema */
     private $schema;
+
     /**
      * Create a schema builder instance.
      */
@@ -17,6 +20,7 @@ class Migration extends AbstractMigration
     {
         $this->schema = (new Capsule())->schema();
     }
+
     /**
      * Get the schema builder instance.
      *
